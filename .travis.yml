@@ -25,7 +25,7 @@ env:
   - DOCKER_COMPOSE_VERSION="1.18.0"
 
 before_install:
-  # Add token for @dashevo private npm registry
+  # Add token for @xazab private npm registry
   - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > .npmrc
 
 install:
@@ -41,4 +41,4 @@ deploy:
   script: bash scripts/travis-deploy.sh
   on:
     tags: true
-    repo: dashevo/js-dp-services-ctl
+    repo: xazab/js-dp-services-ctl

@@ -18,7 +18,7 @@ describe('startDapi', function main() {
         ],
       };
       const options = {
-        dashCore: { container },
+        xazabCore: { container },
         drive: { container },
       };
 
@@ -27,8 +27,8 @@ describe('startDapi', function main() {
 
     after(async () => dapiNode.remove());
 
-    it('should have DashCore container running', async () => {
-      const { State } = await dapiNode.dashCore.container.inspect();
+    it('should have XazabCore container running', async () => {
+      const { State } = await dapiNode.xazabCore.container.inspect();
 
       expect(State.Status).to.equal('running');
     });
@@ -73,15 +73,15 @@ describe('startDapi', function main() {
       const { Config: { Env: envs } } = await dapiNode.dapiCore.container.inspect();
       const expectedEnv = [
         `INSIGHT_URI=http://${dapiNode.insightApi.getIp()}:${dapiNode.insightApi.options.getApiPort()}/insight-api`,
-        `DASHCORE_RPC_HOST=${dapiNode.dashCore.getIp()}`,
-        `DASHCORE_RPC_PORT=${dapiNode.dashCore.options.getRpcPort()}`,
-        `DASHCORE_RPC_USER=${dapiNode.dashCore.options.getRpcUser()}`,
-        `DASHCORE_RPC_PASS=${dapiNode.dashCore.options.getRpcPassword()}`,
-        `DASHCORE_ZMQ_HOST=${dapiNode.dashCore.getIp()}`,
-        `DASHCORE_ZMQ_PORT=${dapiNode.dashCore.options.getZmqPorts().rawtxlock}`, // hashblock, hashtx, hashtxlock, rawblock, rawtx, rawtxlock
-        `DASHCORE_P2P_HOST=${dapiNode.dashCore.getIp()}`,
-        `DASHCORE_P2P_PORT=${dapiNode.dashCore.options.getDashdPort()}`,
-        'DASHCORE_P2P_NETWORK=regtest',
+        `XAZABCORE_RPC_HOST=${dapiNode.xazabCore.getIp()}`,
+        `XAZABCORE_RPC_PORT=${dapiNode.xazabCore.options.getRpcPort()}`,
+        `XAZABCORE_RPC_USER=${dapiNode.xazabCore.options.getRpcUser()}`,
+        `XAZABCORE_RPC_PASS=${dapiNode.xazabCore.options.getRpcPassword()}`,
+        `XAZABCORE_ZMQ_HOST=${dapiNode.xazabCore.getIp()}`,
+        `XAZABCORE_ZMQ_PORT=${dapiNode.xazabCore.options.getZmqPorts().rawtxlock}`, // hashblock, hashtx, hashtxlock, rawblock, rawtx, rawtxlock
+        `XAZABCORE_P2P_HOST=${dapiNode.xazabCore.getIp()}`,
+        `XAZABCORE_P2P_PORT=${dapiNode.xazabCore.options.getXazabdPort()}`,
+        'XAZABCORE_P2P_NETWORK=regtest',
         'NETWORK=regtest',
         'TENDERMINT_RPC_HOST=node0',
         `TENDERMINT_RPC_PORT=${dapiNode.tendermintCore.options.getTendermintPort()}`,
@@ -96,15 +96,15 @@ describe('startDapi', function main() {
       const { Config: { Env: envs } } = await dapiNode.dapiTxFilterStream.container.inspect();
       const expectedEnv = [
         `INSIGHT_URI=http://${dapiNode.insightApi.getIp()}:${dapiNode.insightApi.options.getApiPort()}/insight-api`,
-        `DASHCORE_RPC_HOST=${dapiNode.dashCore.getIp()}`,
-        `DASHCORE_RPC_PORT=${dapiNode.dashCore.options.getRpcPort()}`,
-        `DASHCORE_RPC_USER=${dapiNode.dashCore.options.getRpcUser()}`,
-        `DASHCORE_RPC_PASS=${dapiNode.dashCore.options.getRpcPassword()}`,
-        `DASHCORE_ZMQ_HOST=${dapiNode.dashCore.getIp()}`,
-        `DASHCORE_ZMQ_PORT=${dapiNode.dashCore.options.getZmqPorts().rawtxlock}`, // hashblock, hashtx, hashtxlock, rawblock, rawtx, rawtxlock
-        `DASHCORE_P2P_HOST=${dapiNode.dashCore.getIp()}`,
-        `DASHCORE_P2P_PORT=${dapiNode.dashCore.options.getDashdPort()}`,
-        'DASHCORE_P2P_NETWORK=regtest',
+        `XAZABCORE_RPC_HOST=${dapiNode.xazabCore.getIp()}`,
+        `XAZABCORE_RPC_PORT=${dapiNode.xazabCore.options.getRpcPort()}`,
+        `XAZABCORE_RPC_USER=${dapiNode.xazabCore.options.getRpcUser()}`,
+        `XAZABCORE_RPC_PASS=${dapiNode.xazabCore.options.getRpcPassword()}`,
+        `XAZABCORE_ZMQ_HOST=${dapiNode.xazabCore.getIp()}`,
+        `XAZABCORE_ZMQ_PORT=${dapiNode.xazabCore.options.getZmqPorts().rawtxlock}`, // hashblock, hashtx, hashtxlock, rawblock, rawtx, rawtxlock
+        `XAZABCORE_P2P_HOST=${dapiNode.xazabCore.getIp()}`,
+        `XAZABCORE_P2P_PORT=${dapiNode.xazabCore.options.getXazabdPort()}`,
+        'XAZABCORE_P2P_NETWORK=regtest',
         'NETWORK=regtest',
         'TENDERMINT_RPC_HOST=node0',
         `TENDERMINT_RPC_PORT=${dapiNode.tendermintCore.options.getTendermintPort()}`,
@@ -115,10 +115,10 @@ describe('startDapi', function main() {
       expect(dapiEnvs.length).to.equal(expectedEnv.length);
     });
 
-    it('should be on the same network: DashCore, Drive, MongoDb, Insight API, Machine, Tendermint Core and UpdateState', async () => {
+    it('should be on the same network: XazabCore, Drive, MongoDb, Insight API, Machine, Tendermint Core and UpdateState', async () => {
       const {
-        NetworkSettings: dashCoreNetworkSettings,
-      } = await dapiNode.dashCore.container.inspect();
+        NetworkSettings: xazabCoreNetworkSettings,
+      } = await dapiNode.xazabCore.container.inspect();
 
       const {
         NetworkSettings: driveAbciNetworkSettings,
@@ -144,13 +144,13 @@ describe('startDapi', function main() {
         NetworkSettings: tendermintCoreNetworkSettings,
       } = await dapiNode.tendermintCore.container.inspect();
 
-      expect(Object.keys(dashCoreNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
-      expect(Object.keys(driveAbciNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
-      expect(Object.keys(mongoDbNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
-      expect(Object.keys(insightNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
-      expect(Object.keys(dapiCoreNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
-      expect(Object.keys(dapiTxFilterStreamNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
-      expect(Object.keys(tendermintCoreNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
+      expect(Object.keys(xazabCoreNetworkSettings.Networks)).to.deep.equal(['xazab_test_network']);
+      expect(Object.keys(driveAbciNetworkSettings.Networks)).to.deep.equal(['xazab_test_network']);
+      expect(Object.keys(mongoDbNetworkSettings.Networks)).to.deep.equal(['xazab_test_network']);
+      expect(Object.keys(insightNetworkSettings.Networks)).to.deep.equal(['xazab_test_network']);
+      expect(Object.keys(dapiCoreNetworkSettings.Networks)).to.deep.equal(['xazab_test_network']);
+      expect(Object.keys(dapiTxFilterStreamNetworkSettings.Networks)).to.deep.equal(['xazab_test_network']);
+      expect(Object.keys(tendermintCoreNetworkSettings.Networks)).to.deep.equal(['xazab_test_network']);
     });
   });
 
@@ -168,7 +168,7 @@ describe('startDapi', function main() {
         ],
       };
       const options = {
-        dashCore: { container },
+        xazabCore: { container },
         drive: { container },
       };
 
@@ -181,9 +181,9 @@ describe('startDapi', function main() {
       );
     });
 
-    it('should have DashCore containers running', async () => {
+    it('should have XazabCore containers running', async () => {
       for (let i = 0; i < nodesCount; i++) {
-        const { State } = await dapiNodes[i].dashCore.container.inspect();
+        const { State } = await dapiNodes[i].xazabCore.container.inspect();
 
         expect(State.Status).to.equal('running');
       }

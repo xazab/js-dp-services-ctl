@@ -1,16 +1,16 @@
 const removeContainers = require('../../../../lib/docker/removeContainers');
-const { startDashCore } = require('../../../../lib');
+const { startXazabCore } = require('../../../../lib');
 
 const wait = require('../../../../lib/util/wait');
 
-describe('startDashCore', function main() {
+describe('startXazabCore', function main() {
   this.timeout(60000);
 
   before(removeContainers);
 
   describe('One node', () => {
     const CONTAINER_VOLUME = '/usr/src/app/README.md';
-    let dashCoreNode;
+    let xazabCoreNode;
 
     before(async () => {
       const rootPath = process.cwd();
@@ -21,20 +21,20 @@ describe('startDashCore', function main() {
       };
       const options = { container };
 
-      dashCoreNode = await startDashCore(options);
+      xazabCoreNode = await startXazabCore(options);
     });
 
-    after(async () => dashCoreNode.remove());
+    after(async () => xazabCoreNode.remove());
 
     it('should have container running', async () => {
-      const { State, Mounts } = await dashCoreNode.container.inspect();
+      const { State, Mounts } = await xazabCoreNode.container.inspect();
 
       expect(State.Status).to.equal('running');
       expect(Mounts.map(mount => mount.Destination)).to.include(CONTAINER_VOLUME);
     });
 
     it('should have RPC connected', async () => {
-      const { result } = await dashCoreNode.rpcClient.getInfo();
+      const { result } = await xazabCoreNode.rpcClient.getInfo();
 
       expect(result).to.have.property('version');
     });
@@ -44,7 +44,7 @@ describe('startDashCore', function main() {
     const nodesCount = 2;
     const CONTAINER_VOLUME = '/usr/src/app/README.md';
 
-    let dashCoreNodes;
+    let xazabCoreNodes;
 
     before(async () => {
       const rootPath = process.cwd();
@@ -55,18 +55,18 @@ describe('startDashCore', function main() {
       };
       const options = { container };
 
-      dashCoreNodes = await startDashCore.many(nodesCount, options);
+      xazabCoreNodes = await startXazabCore.many(nodesCount, options);
     });
 
     after(async () => {
       await Promise.all(
-        dashCoreNodes.map(instance => instance.remove()),
+        xazabCoreNodes.map(instance => instance.remove()),
       );
     });
 
     it('should have containers running', async () => {
       for (let i = 0; i < nodesCount; i++) {
-        const { State, Mounts } = await dashCoreNodes[i].container.inspect();
+        const { State, Mounts } = await xazabCoreNodes[i].container.inspect();
 
         expect(State.Status).to.equal('running');
         expect(Mounts.map(mount => mount.Destination)).to.include(CONTAINER_VOLUME);
@@ -75,18 +75,18 @@ describe('startDashCore', function main() {
 
     it('should propagate blocks between nodes', async () => {
       for (let i = 0; i < nodesCount; i++) {
-        const { result: blocks } = await dashCoreNodes[i].rpcClient.getBlockCount();
+        const { result: blocks } = await xazabCoreNodes[i].rpcClient.getBlockCount();
 
         expect(blocks).to.equal(1);
       }
 
-      const { result: address } = await dashCoreNodes[0].rpcClient.getNewAddress();
-      await dashCoreNodes[0].rpcClient.generateToAddress(2, address);
+      const { result: address } = await xazabCoreNodes[0].rpcClient.getNewAddress();
+      await xazabCoreNodes[0].rpcClient.generateToAddress(2, address);
 
       await wait(5000);
 
       for (let i = 0; i < nodesCount; i++) {
-        const { result: blocks } = await dashCoreNodes[i].rpcClient.getBlockCount();
+        const { result: blocks } = await xazabCoreNodes[i].rpcClient.getBlockCount();
 
         expect(blocks).to.equal(3);
       }

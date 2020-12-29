@@ -1,7 +1,7 @@
 const stream = require('stream');
 
 const Docker = require('dockerode');
-const DashCoreOptions = require('../../../lib/services/dashCore/DashCoreOptions');
+const XazabCoreOptions = require('../../../lib/services/xazabCore/XazabCoreOptions');
 const getAwsEcrAuthorizationToken = require('../../../lib/docker/getAwsEcrAuthorizationToken');
 const Image = require('../../../lib/docker/Image');
 
@@ -32,7 +32,7 @@ describe('Image', function main() {
   });
 
   it.skip('should pull an image with authentication', async function it() {
-    const options = new DashCoreOptions();
+    const options = new XazabCoreOptions();
     const imageName = 'private/image:name';
 
     const authorizationToken = await getAwsEcrAuthorizationToken(options.getAwsOptions());

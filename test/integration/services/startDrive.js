@@ -18,7 +18,7 @@ describe('startDrive', function main() {
         ],
       };
       const options = {
-        dashCore: { container },
+        xazabCore: { container },
         drive: { container },
       };
 
@@ -27,8 +27,8 @@ describe('startDrive', function main() {
 
     after(async () => driveNode.remove());
 
-    it('should have DashCore container running', async () => {
-      const { State } = await driveNode.dashCore.container.inspect();
+    it('should have XazabCore container running', async () => {
+      const { State } = await driveNode.xazabCore.container.inspect();
 
       expect(State.Status).to.equal('running');
     });
@@ -50,10 +50,10 @@ describe('startDrive', function main() {
       const { Config: { Env: ApiEnvs } } = await driveNode.driveAbci.container.inspect();
 
       const expectedEnv = [
-        `CORE_JSON_RPC_HOST=${driveNode.dashCore.getIp()}`,
-        `CORE_JSON_RPC_PORT=${driveNode.dashCore.options.getRpcPort()}`,
-        `CORE_JSON_RPC_USERNAME=${driveNode.dashCore.options.getRpcUser()}`,
-        `CORE_JSON_RPC_PASSWORD=${driveNode.dashCore.options.getRpcPassword()}`,
+        `CORE_JSON_RPC_HOST=${driveNode.xazabCore.getIp()}`,
+        `CORE_JSON_RPC_PORT=${driveNode.xazabCore.options.getRpcPort()}`,
+        `CORE_JSON_RPC_USERNAME=${driveNode.xazabCore.options.getRpcUser()}`,
+        `CORE_JSON_RPC_PASSWORD=${driveNode.xazabCore.options.getRpcPassword()}`,
         `DOCUMENT_MONGODB_URL=mongodb://${driveNode.mongoDb.getIp()}:${driveNode.mongoDb.options.getMongoPort()}`,
       ];
 
@@ -64,8 +64,8 @@ describe('startDrive', function main() {
 
     it('should have all of the containers on the same network', async () => {
       const {
-        NetworkSettings: dashCoreNetworkSettings,
-      } = await driveNode.dashCore.container.inspect();
+        NetworkSettings: xazabCoreNetworkSettings,
+      } = await driveNode.xazabCore.container.inspect();
 
       const {
         NetworkSettings: driveAbciNetworkSettings,
@@ -75,9 +75,9 @@ describe('startDrive', function main() {
         NetworkSettings: mongoDbNetworkSettings,
       } = await driveNode.mongoDb.container.inspect();
 
-      expect(Object.keys(dashCoreNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
-      expect(Object.keys(driveAbciNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
-      expect(Object.keys(mongoDbNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
+      expect(Object.keys(xazabCoreNetworkSettings.Networks)).to.deep.equal(['xazab_test_network']);
+      expect(Object.keys(driveAbciNetworkSettings.Networks)).to.deep.equal(['xazab_test_network']);
+      expect(Object.keys(mongoDbNetworkSettings.Networks)).to.deep.equal(['xazab_test_network']);
     });
   });
 
@@ -95,7 +95,7 @@ describe('startDrive', function main() {
         ],
       };
       const options = {
-        dashCore: { container },
+        xazabCore: { container },
         drive: { container },
       };
 
@@ -106,9 +106,9 @@ describe('startDrive', function main() {
       await Promise.all(driveNodes.map(instance => instance.remove()));
     });
 
-    it('should have DashCore containers running', async () => {
+    it('should have XazabCore containers running', async () => {
       for (let i = 0; i < nodesCount; i++) {
-        const { State } = await driveNodes[i].dashCore.container.inspect();
+        const { State } = await driveNodes[i].xazabCore.container.inspect();
 
         expect(State.Status).to.equal('running');
       }

@@ -1,11 +1,11 @@
-# Dash Platform services ctl
+# Xazab Platform services ctl
 
-[![Build Status](https://travis-ci.com/dashevo/js-dp-services-ctl.svg?branch=master)](https://travis-ci.com/dashevo/js-dp-services-ctl)
-[![NPM version](https://img.shields.io/npm/v/@dashevo/dp-services-ctl.svg)](https://npmjs.org/package/@dashevo/dp-services-ctl)
+[![Build Status](https://travis-ci.com/xazab/js-dp-services-ctl.svg?branch=master)](https://travis-ci.com/xazab/js-dp-services-ctl)
+[![NPM version](https://img.shields.io/npm/v/@xazab/dp-services-ctl.svg)](https://npmjs.org/package/@xazab/dp-services-ctl)
 
-> Control Dash Platform services using JavaScript and Docker
+> Control Xazab Platform services using JavaScript and Docker
 
-The tool provides a convenient JavaScript interface for configuration and interaction with Dash Platform services. Services are started in Docker containers.
+The tool provides a convenient JavaScript interface for configuration and interaction with Xazab Platform services. Services are started in Docker containers.
 
 ## Table of Contents
 
@@ -24,7 +24,7 @@ The tool provides a convenient JavaScript interface for configuration and intera
 2. Install NPM package:
 
     ```sh
-    npm install @dashevo/dp-services-ctl
+    npm install @xazab/dp-services-ctl
     ```
 
 ## Usage
@@ -33,57 +33,57 @@ The tool provides a convenient JavaScript interface for configuration and intera
 
 #### Drive
 
-[Drive](https://github.com/dashevo/drive) service starts a bunch of related services:
+[Drive](https://github.com/xazab/drive) service starts a bunch of related services:
 - DriveAbci
-    - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/drive/abci/DriveAbci.js)
-    - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/drive/abci/DriveAbciOptions.js)
+    - [Methods](https://github.com/xazab/js-dp-services-ctl/blob/master/lib/services/drive/abci/DriveAbci.js)
+    - [Options](https://github.com/xazab/js-dp-services-ctl/blob/master/lib/services/drive/abci/DriveAbciOptions.js)
 - [MongoDB](#mongodb)
-- [Dash Core](#dash-core)
+- [Xazab Core](#xazab-core)
 
 #### DAPI
 
-[DAPI](https://github.com/dashevo/dapi) service starts all DP services:
+[DAPI](https://github.com/xazab/dapi) service starts all DP services:
 - DAPI Core
-    - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/dapi/core/DapiCore.js)
-    - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/dapi/core/DapiCoreOptions.js)
+    - [Methods](https://github.com/xazab/js-dp-services-ctl/blob/master/lib/services/dapi/core/DapiCore.js)
+    - [Options](https://github.com/xazab/js-dp-services-ctl/blob/master/lib/services/dapi/core/DapiCoreOptions.js)
 - DAPI TxFilterStream
-    - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/dapi/txFilterStream/DapiTxFilterStream.js)
-    - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/dapi/txFilterStream/DapiTxFilterStreamOptions.js)
+    - [Methods](https://github.com/xazab/js-dp-services-ctl/blob/master/lib/services/dapi/txFilterStream/DapiTxFilterStream.js)
+    - [Options](https://github.com/xazab/js-dp-services-ctl/blob/master/lib/services/dapi/txFilterStream/DapiTxFilterStreamOptions.js)
 - [Drive](#drive)
 - [MongoDB](#mongodb)
-- [DashCore](#dash-core)
+- [XazabCore](#xazab-core)
 - [Insight](#insight)
 - [Tendermint Core](#tendermint-core)
 
-#### Dash Core
+#### Xazab Core
 
-- [Dash Core](https://github.com/dashpay/dash) service
-    - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/dashCore/DashCore.js)
-    - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/dashCore/DashCoreOptions.js)
+- [Xazab Core](https://github.com/xazab/xazab) service
+    - [Methods](https://github.com/xazab/js-dp-services-ctl/blob/master/lib/services/xazabCore/XazabCore.js)
+    - [Options](https://github.com/xazab/js-dp-services-ctl/blob/master/lib/services/xazabCore/XazabCoreOptions.js)
 
 #### Tendermint Core
 
 - [Tendermint Core](https://tendermint.com) service
-    - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/tendermintCore/TendermintCore.js)
-    - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/tendermintCore/TendermintCoreOptions.js)
+    - [Methods](https://github.com/xazab/js-dp-services-ctl/blob/master/lib/services/tendermintCore/TendermintCore.js)
+    - [Options](https://github.com/xazab/js-dp-services-ctl/blob/master/lib/services/tendermintCore/TendermintCoreOptions.js)
 
 #### Insight API
 
-- [Insight API](https://github.com/dashevo/insight-api) service
-    - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/insightApi/InsightApi.js)
-    - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/insightApi/InsightApiOptions.js)
+- [Insight API](https://github.com/xazab/insight-api) service
+    - [Methods](https://github.com/xazab/js-dp-services-ctl/blob/master/lib/services/insightApi/InsightApi.js)
+    - [Options](https://github.com/xazab/js-dp-services-ctl/blob/master/lib/services/insightApi/InsightApiOptions.js)
 
 #### MongoDB
 
 - [MongoDB](https://www.mongodb.com/) service
-    - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/mongoDb/MongoDb.js)
-    - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/mongoDb/MongoDbOptions.js)
+    - [Methods](https://github.com/xazab/js-dp-services-ctl/blob/master/lib/services/mongoDb/MongoDb.js)
+    - [Options](https://github.com/xazab/js-dp-services-ctl/blob/master/lib/services/mongoDb/MongoDbOptions.js)
 
 ### Starting a service
 
 ```js
 // Export service(s)
-const { startMongoDb } = require('@dashevo/dp-services-ctl');
+const { startMongoDb } = require('@xazab/dp-services-ctl');
 // This is optional. Default options listed in options class
 const options = {
   port: 27017, // mongoDB port
@@ -102,7 +102,7 @@ await mongo.remove();
 Use `many` method to start several instances:
 
 ```js
-const { startMongoDb } = require('@dashevo/dp-services-ctl');
+const { startMongoDb } = require('@xazab/dp-services-ctl');
 
 // This is optional. Default options listed in options class
 const options = {
@@ -139,7 +139,7 @@ Services [Mocha](https://mochajs.org/) hooks provide automation for your mocha t
 
 ```js
 // Export service(s) with mocha hooks
-const { mocha: { startMongoDb } } = require('@dashevo/dp-services-ctl');
+const { mocha: { startMongoDb } } = require('@xazab/dp-services-ctl');
 
 describe('Test suite', () => {
   let mongoClient;
@@ -167,8 +167,8 @@ describe('Test suite', () => {
 
 ## Contributing
 
-Feel free to dive in! [Open an issue](https://github.com/dashevo/js-dp-services-ctl/issues/new) or submit PRs.
+Feel free to dive in! [Open an issue](https://github.com/xazab/js-dp-services-ctl/issues/new) or submit PRs.
 
 ## License
 
-[MIT](LICENSE) &copy; Dash Core Group, Inc.
+[MIT](LICENSE) &copy; Xazab Core Group, Inc.

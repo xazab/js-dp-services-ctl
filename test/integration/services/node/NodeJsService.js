@@ -65,7 +65,7 @@ describe('NodeJsService', function main() {
       container: {
         image: 'node:10-alpine',
         network: {
-          name: 'dash_test_network',
+          name: 'xazab_test_network',
           driver: 'bridge',
         },
         cmd: ['sh', '-c', 'sleep 120000'],

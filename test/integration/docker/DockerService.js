@@ -1,7 +1,7 @@
 const Docker = require('dockerode');
 
 const removeContainers = require('../../../lib/docker/removeContainers');
-const DashCoreOptions = require('../../../lib/services/dashCore/DashCoreOptions');
+const XazabCoreOptions = require('../../../lib/services/xazabCore/XazabCoreOptions');
 const Network = require('../../../lib/docker/Network');
 const getAwsEcrAuthorizationToken = require('../../../lib/docker/getAwsEcrAuthorizationToken');
 const Image = require('../../../lib/docker/Image');
@@ -30,23 +30,23 @@ describe('DockerService', function main() {
 
   before(removeContainers);
 
-  const options = new DashCoreOptions();
+  const options = new XazabCoreOptions();
 
   describe('usage', () => {
-    let dashCore;
+    let xazabCore;
 
     before(async () => {
-      dashCore = await createInstance(options);
+      xazabCore = await createInstance(options);
     });
 
-    after(async () => dashCore.remove());
+    after(async () => xazabCore.remove());
 
-    it('should be able to start a DockerService with DashCoreOptions network options', async () => {
-      await dashCore.start();
+    it('should be able to start a DockerService with XazabCoreOptions network options', async () => {
+      await xazabCore.start();
       const { name, driver } = options.getContainerNetworkOptions();
       const dockerNetwork = new Docker().getNetwork(name);
       const { Driver } = await dockerNetwork.inspect();
-      const { NetworkSettings: { Networks } } = await dashCore.container.inspect();
+      const { NetworkSettings: { Networks } } = await xazabCore.container.inspect();
       const networks = Object.keys(Networks);
 
       expect(Driver).to.equal(driver);
@@ -54,13 +54,13 @@ describe('DockerService', function main() {
       expect(networks[0]).to.equal(name);
     });
 
-    it('should be able to start an instance with the DashCoreOptions options', async () => {
-      await dashCore.start();
+    it('should be able to start an instance with the XazabCoreOptions options', async () => {
+      await xazabCore.start();
 
-      const { Args } = await dashCore.container.inspect();
+      const { Args } = await xazabCore.container.inspect();
 
       expect(Args).to.deep.equal([
-        `-port=${options.getDashdPort()}`,
+        `-port=${options.getXazabdPort()}`,
         `-rpcuser=${options.getRpcUser()}`,
         `-rpcpassword=${options.getRpcPassword()}`,
         '-rpcallowip=0.0.0.0/0',
@@ -82,35 +82,35 @@ describe('DockerService', function main() {
     });
 
     it('should not crash if start method is called multiple times', async () => {
-      await dashCore.start();
-      await dashCore.start();
+      await xazabCore.start();
+      await xazabCore.start();
     });
 
     it('should be able to stop the instance', async () => {
-      await dashCore.stop();
+      await xazabCore.stop();
 
-      const { State } = await dashCore.container.inspect();
+      const { State } = await xazabCore.container.inspect();
 
       expect(State.Status).to.equal('exited');
     });
 
     it('should be able to start the instance after stopping it', async () => {
-      await dashCore.start();
+      await xazabCore.start();
 
-      const { State } = await dashCore.container.inspect();
+      const { State } = await xazabCore.container.inspect();
 
       expect(State.Status).to.equal('running');
     });
 
     it('should return instance IP address as a result of calling getIp method', () => {
-      expect(dashCore.getIp()).to.equal(dashCore.getIp());
+      expect(xazabCore.getIp()).to.equal(xazabCore.getIp());
     });
 
     it('should be able to remove the instance', async () => {
-      await dashCore.remove();
+      await xazabCore.remove();
 
       try {
-        await dashCore.container.inspect();
+        await xazabCore.container.inspect();
 
         expect.fail('should throw error "Container not found"');
       } catch (e) {
@@ -126,9 +126,9 @@ describe('DockerService', function main() {
     let sandbox;
 
     before(async () => {
-      instanceOne = await createInstance(new DashCoreOptions());
-      instanceTwo = await createInstance(new DashCoreOptions());
-      instanceThree = await createInstance(new DashCoreOptions());
+      instanceOne = await createInstance(new XazabCoreOptions());
+      instanceTwo = await createInstance(new XazabCoreOptions());
+      instanceThree = await createInstance(new XazabCoreOptions());
     });
 
     beforeEach(function before() {

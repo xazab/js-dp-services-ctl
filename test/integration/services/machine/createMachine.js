@@ -43,17 +43,17 @@ describe('createMachine', function main() {
       ]);
     });
 
-    it('should be able to start an instance with a bridge network called dash_test_network', async () => {
+    it('should be able to start an instance with a bridge network called xazab_test_network', async () => {
       await machine.start();
 
-      const network = new Docker().getNetwork('dash_test_network');
+      const network = new Docker().getNetwork('xazab_test_network');
       const { Driver } = await network.inspect();
       const { NetworkSettings: { Networks } } = await machine.container.inspect();
       const networks = Object.keys(Networks);
 
       expect(Driver).to.equal('bridge');
       expect(networks.length).to.equal(1);
-      expect(networks[0]).to.equal('dash_test_network');
+      expect(networks[0]).to.equal('xazab_test_network');
     });
 
     it('should be able to start an instance with custom environment variables', async () => {

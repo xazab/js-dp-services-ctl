@@ -8,8 +8,8 @@ describe('startDrive', () => {
       driveNode = instance;
     });
 
-    it('should have DashCore container running', async () => {
-      const { State } = await driveNode.dashCore.container.inspect();
+    it('should have XazabCore container running', async () => {
+      const { State } = await driveNode.xazabCore.container.inspect();
 
       expect(State.Status).to.equal('running');
     });
@@ -36,9 +36,9 @@ describe('startDrive', () => {
       driveNodes = instances;
     });
 
-    it('should have DashCore containers running', async () => {
+    it('should have XazabCore containers running', async () => {
       for (let i = 0; i < nodesCount; i++) {
-        const { State } = await driveNodes[i].dashCore.container.inspect();
+        const { State } = await driveNodes[i].xazabCore.container.inspect();
 
         expect(State.Status).to.equal('running');
       }

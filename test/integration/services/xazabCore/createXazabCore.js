@@ -1,28 +1,28 @@
 const Docker = require('dockerode');
 
 const removeContainers = require('../../../../lib/docker/removeContainers');
-const { createDashCore } = require('../../../../lib');
-const DashCoreOptions = require('../../../../lib/services/dashCore/DashCoreOptions');
+const { createXazabCore } = require('../../../../lib');
+const XazabCoreOptions = require('../../../../lib/services/xazabCore/XazabCoreOptions');
 
 const wait = require('../../../../lib/util/wait');
 
-describe('createDashCore', function main() {
+describe('createXazabCore', function main() {
   this.timeout(60000);
 
   before(removeContainers);
 
   describe('before start', () => {
-    let dashCore;
+    let xazabCore;
 
     before(async () => {
-      dashCore = await createDashCore();
+      xazabCore = await createXazabCore();
     });
 
     it('should throw an error if trying to connect to a node that is not running', async () => {
-      const instanceTwo = await createDashCore();
+      const instanceTwo = await createXazabCore();
 
       try {
-        await dashCore.connect(instanceTwo);
+        await xazabCore.connect(instanceTwo);
 
         expect.fail('should throw error "Instance should be started before!"');
       } catch (e) {
@@ -31,42 +31,42 @@ describe('createDashCore', function main() {
     });
 
     it('should return an empty object as a result of calling getApi', () => {
-      const api = dashCore.getApi();
+      const api = xazabCore.getApi();
 
       expect(api).to.deep.equal({});
     });
   });
 
   describe('usage', async () => {
-    let dashCore;
+    let xazabCore;
 
     before(async () => {
-      dashCore = await createDashCore();
+      xazabCore = await createXazabCore();
     });
 
-    after(async () => dashCore.remove());
+    after(async () => xazabCore.remove());
 
-    it('should have an instance running with a bridge network named dash_test_network', async () => {
-      await dashCore.start();
-      const network = new Docker().getNetwork('dash_test_network');
+    it('should have an instance running with a bridge network named xazab_test_network', async () => {
+      await xazabCore.start();
+      const network = new Docker().getNetwork('xazab_test_network');
       const { Driver } = await network.inspect();
-      const { NetworkSettings: { Networks } } = await dashCore.container.inspect();
+      const { NetworkSettings: { Networks } } = await xazabCore.container.inspect();
       const networks = Object.keys(Networks);
 
       expect(Driver).to.equal('bridge');
       expect(networks.length).to.equal(1);
-      expect(networks[0]).to.equal('dash_test_network');
+      expect(networks[0]).to.equal('xazab_test_network');
     });
 
     it('should have an instance running with default options', async () => {
-      await dashCore.start();
+      await xazabCore.start();
 
-      const { Args } = await dashCore.container.inspect();
+      const { Args } = await xazabCore.container.inspect();
 
       expect(Args).to.deep.equal([
-        `-port=${dashCore.options.getDashdPort()}`,
-        `-rpcuser=${dashCore.options.getRpcUser()}`,
-        `-rpcpassword=${dashCore.options.getRpcPassword()}`,
+        `-port=${xazabCore.options.getXazabdPort()}`,
+        `-rpcuser=${xazabCore.options.getRpcUser()}`,
+        `-rpcpassword=${xazabCore.options.getRpcPassword()}`,
         '-rpcallowip=0.0.0.0/0',
         '-regtest=1',
         '-keypool=1',
@@ -75,19 +75,19 @@ describe('createDashCore', function main() {
         '-txindex=1',
         '-timestampindex=1',
         '-daemon=0',
-        `-rpcport=${dashCore.options.getRpcPort()}`,
-        `-zmqpubrawtx=tcp://0.0.0.0:${dashCore.options.getZmqPorts().rawtx}`,
-        `-zmqpubrawtxlock=tcp://0.0.0.0:${dashCore.options.getZmqPorts().rawtxlock}`,
-        `-zmqpubhashblock=tcp://0.0.0.0:${dashCore.options.getZmqPorts().hashblock}`,
-        `-zmqpubhashtx=tcp://0.0.0.0:${dashCore.options.getZmqPorts().hashtx}`,
-        `-zmqpubhashtxlock=tcp://0.0.0.0:${dashCore.options.getZmqPorts().hashtxlock}`,
-        `-zmqpubrawblock=tcp://0.0.0.0:${dashCore.options.getZmqPorts().rawblock}`,
+        `-rpcport=${xazabCore.options.getRpcPort()}`,
+        `-zmqpubrawtx=tcp://0.0.0.0:${xazabCore.options.getZmqPorts().rawtx}`,
+        `-zmqpubrawtxlock=tcp://0.0.0.0:${xazabCore.options.getZmqPorts().rawtxlock}`,
+        `-zmqpubhashblock=tcp://0.0.0.0:${xazabCore.options.getZmqPorts().hashblock}`,
+        `-zmqpubhashtx=tcp://0.0.0.0:${xazabCore.options.getZmqPorts().hashtx}`,
+        `-zmqpubhashtxlock=tcp://0.0.0.0:${xazabCore.options.getZmqPorts().hashtxlock}`,
+        `-zmqpubrawblock=tcp://0.0.0.0:${xazabCore.options.getZmqPorts().rawblock}`,
       ]);
     });
 
     it('should return an RPC client as a result of calling getApi', () => {
-      const rpcPort = dashCore.options.getRpcPort();
-      const rpcClient = dashCore.getApi();
+      const rpcPort = xazabCore.options.getRpcPort();
+      const rpcClient = xazabCore.getApi();
 
       expect(rpcClient.host).to.equal('127.0.0.1');
       expect(rpcClient.port).to.equal(rpcPort);
@@ -99,8 +99,8 @@ describe('createDashCore', function main() {
     let instanceTwo;
 
     before(async () => {
-      instanceOne = await createDashCore();
-      instanceTwo = await createDashCore();
+      instanceOne = await createXazabCore();
+      instanceTwo = await createXazabCore();
     });
 
     before(async () => {
@@ -168,29 +168,29 @@ describe('createDashCore', function main() {
   });
 
   describe('RPC', async () => {
-    let dashCore;
+    let xazabCore;
 
     before(async () => {
-      dashCore = await createDashCore();
+      xazabCore = await createXazabCore();
     });
 
-    after(async () => dashCore.remove());
+    after(async () => xazabCore.remove());
 
     it('should be able to make RPC calls after starting the instance', async () => {
-      await dashCore.start();
+      await xazabCore.start();
 
-      const rpcClient = dashCore.getApi();
+      const rpcClient = xazabCore.getApi();
       const { result } = await rpcClient.getInfo();
 
       expect(result).to.have.property('version');
     });
 
     it('should be able to make RPC calls after restarting the instance', async () => {
-      await dashCore.start();
-      await dashCore.stop();
-      await dashCore.start();
+      await xazabCore.start();
+      await xazabCore.stop();
+      await xazabCore.start();
 
-      const rpcClient = dashCore.getApi();
+      const rpcClient = xazabCore.getApi();
       const { result } = await rpcClient.getInfo();
 
       expect(result).to.have.property('version');
@@ -213,7 +213,7 @@ describe('createDashCore', function main() {
         },
       };
 
-      instance = await createDashCore(options);
+      instance = await createXazabCore(options);
 
       await instance.start();
 
@@ -222,10 +222,10 @@ describe('createDashCore', function main() {
       expect(Mounts.map(mount => mount.Destination)).to.include(CONTAINER_VOLUME);
     });
 
-    it('should be able to start an instance with DashCoreOptions', async () => {
+    it('should be able to start an instance with XazabCoreOptions', async () => {
       const rootPath = process.cwd();
       const CONTAINER_VOLUME = '/usr/src/app/README.md';
-      const options = new DashCoreOptions({
+      const options = new XazabCoreOptions({
         container: {
           volumes: [
             `${rootPath}/README.md:${CONTAINER_VOLUME}`,
@@ -233,7 +233,7 @@ describe('createDashCore', function main() {
         },
       });
 
-      instance = await createDashCore(options);
+      instance = await createXazabCore(options);
 
       await instance.start();
 
@@ -242,16 +242,16 @@ describe('createDashCore', function main() {
       expect(Mounts.map(mount => mount.Destination)).to.include(CONTAINER_VOLUME);
     });
 
-    it('should be able to start an instance with custom default DashCoreOptions', async () => {
-      const options = new DashCoreOptions();
+    it('should be able to start an instance with custom default XazabCoreOptions', async () => {
+      const options = new XazabCoreOptions();
 
-      instance = await createDashCore(options);
+      instance = await createXazabCore(options);
 
       await instance.start();
 
       const { Config: { Image: imageName } } = await instance.container.inspect();
 
-      expect(imageName).to.contain('dash');
+      expect(imageName).to.contain('xazab');
     });
   });
 });

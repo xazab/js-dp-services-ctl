@@ -7,7 +7,7 @@ const sinonChai = require('sinon-chai');
 const dirtyChai = require('dirty-chai');
 const chaiAsPromised = require('chai-as-promised');
 
-const DashCoreOptions = require('../lib/services/dashCore/DashCoreOptions');
+const XazabCoreOptions = require('../lib/services/xazabCore/XazabCoreOptions');
 const DriveAbciOptions = require('../lib/services/drive/abci/DriveAbciOptions');
 
 const DapiCoreOptions = require('../lib/services/dapi/core/DapiCoreOptions');
@@ -35,7 +35,7 @@ if (process.env.SERVICE_IMAGE_DRIVE) {
 }
 
 if (process.env.SERVICE_IMAGE_CORE) {
-  DashCoreOptions.setDefaultCustomOptions({
+  XazabCoreOptions.setDefaultCustomOptions({
     container: {
       image: process.env.SERVICE_IMAGE_CORE,
     },
